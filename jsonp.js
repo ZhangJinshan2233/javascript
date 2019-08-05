@@ -12,7 +12,7 @@ function jsonp(req) {
 
     function jsonp(options) {
         if (!options || !options.url) return
-        let sriptNode = document.createElement('script')
+        let scriptNode = document.createElement('script')
         let {
             data,
             url,
