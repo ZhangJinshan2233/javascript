@@ -1,12 +1,11 @@
-class myPromise {
+class MyPromise {
     constructor(executor) {
 
         if (!isFunction(executor)) {
-            throw new Error('myPromise must accept a function')
+            throw new Error('MyPromise must accept a function')
         }
         this._state = 'pending';
         this._value = undefined;
-        this._reason = undefined;
         this._fullfilledQueues = [];
         this._rejectedQueues = [];
 
@@ -48,7 +47,7 @@ class myPromise {
          *  current promise depend on promise argument
          * 
          */
-        if (val instanceof myPromise) {
+        if (val instanceof MyPromise) {
             val.then(value => {
                 this._value = value;
                 this._state = 'fullfilled';
@@ -113,7 +112,7 @@ class myPromise {
                         onFulfilledNext(value)
                     } else {
                         let res = onFullfilled(value)
-                        if (res instanceof myPromise) {
+                        if (res instanceof MyPromise) {
                             res.then(onFulfilledNext, onRejectedNext)
                         } else {
                             onFulfilledNext(err)
@@ -130,7 +129,7 @@ class myPromise {
                         onRejectedNext(error)
                     } else {
                         res = onRejected(error)
-                        if (res instanceof mypromise) {
+                        if (res instanceof MyPromise) {
                             res.then(onFulfilledNext, onRejectedNext)
                         } else {
                             onFulfilledNext(res)
@@ -151,18 +150,18 @@ class myPromise {
      * add static methods
      */
     static resolve(value) {
-        if (value instanceof myPromise) return value;
-        return new myPromise(resolve => resolve(value))
+        if (value instanceof MyPromise) return value;
+        return new MyPromise(resolve => resolve(value))
     }
 
     static reject(value) {
-        return new myPromise((resolve, reject) => {
+        return new MyPromise((resolve, reject) => {
             reject(value)
         })
     }
 
     static all(list) {
-        return new myPromise((resolve, reject) => {
+        return new MyPromise((resolve, reject) => {
             /**
              * return the of returned value
              */
@@ -173,7 +172,7 @@ class myPromise {
                     values[i] = res;
                     count++;
                     if (count == list.length) resolve(values)
-                },err=>{
+                }, err => {
                     reject(err)
                 })
             }
@@ -181,21 +180,23 @@ class myPromise {
 
     }
 
-    static race(list){
-        return new myPromise((resolve,reject)=>{
-            for (let p of list){
-                this.resolve(p).then(res=>{
+    static race(list) {
+        return new MyPromise((resolve, reject) => {
+            for (let p of list) {
+                this.resolve(p).then(res => {
                     resolve(res)
-                },err=>{
+                }, err => {
                     reject(err)
                 })
             }
         })
     }
 
-    finally(cb){
-        return this.then(value=>myPromise.resolve(cb()).then(()=>value),
-        reason=>myPromise.resolve(cb()).then(()=>{throw reason})
+    finally(cb) {
+        return this.then(value => MyPromise.resolve(cb()).then(() => value),
+            reason => MyPromise.resolve(cb()).then(() => {
+                throw reason
+            })
         )
     }
 }
