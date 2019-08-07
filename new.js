@@ -1,4 +1,3 @@
-// 第二版
 function create() {
     // create new object
     let obj = {};

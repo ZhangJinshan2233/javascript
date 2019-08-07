@@ -13,6 +13,6 @@ function instanceOf(left, right) {
         if (leftObj === rightObj)
             return true
 
-        leftObj=leftObj.__proto__
+        leftObj = leftObj.__proto__
     }
 }
